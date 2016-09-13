@@ -7,7 +7,7 @@ example compile command with gcc:
 
 gcc main.cpp -I/opt/local/include -o out -L/opt/local/lib -lglfw.3 -L/opt/local/lib -lGLEW.2.0 -framework OpenGL
 
-Prerequisite: 
+#Prerequisite: 
 -  glfw&amp;glew header files are installed in /opt/local/include
 -  glfw&amp;glew lib files are installed in /opt/local/lib
 -  glfw version: 3.2.1, downloaded from http://www.glfw.org/download.html
