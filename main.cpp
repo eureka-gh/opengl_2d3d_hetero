@@ -1,9 +1,9 @@
 //
 //  main.cpp
-//  GlfwExample
+//  GLFW&GLEW Example for 2d&3d rendering in different window contexts
 //
-//  Created by Chan, Michael on 26/08/2016.
-//  Copyright © 2016 Dolby. All rights reserved.
+//  Created by Hao, Gao on 26/08/2016.
+//  Copyright © 2016. All rights reserved.
 //
 
 #include <iostream>
