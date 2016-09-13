@@ -4,6 +4,7 @@ A sample code that presents a way to draw 2d &amp; 3d scenes in different window
 Make sure GLFW and GLEW has been installed.
 
 example compile command with gcc:
+
 gcc main.cpp -I/opt/local/include -o out -L/opt/local/lib -lglfw.3 -L/opt/local/lib -lGLEW.2.0 -framework OpenGL
 
 Prerequisite: 
