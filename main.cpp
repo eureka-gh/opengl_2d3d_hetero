@@ -1,9 +1,9 @@
 //
 //  main.cpp
-//  GLFW&GLEW Example for 2d&3d rendering in different window contexts
+//  GlfwExample
 //
-//  Created by Hao, Gao on 26/08/2016.
-//  Copyright © 2016. All rights reserved.
+//  Created by Chan, Michael on 26/08/2016.
+//  Copyright © 2016 Dolby. All rights reserved.
 //
 
 #include <iostream>
@@ -24,6 +24,10 @@
 bool g_stop_signal = false;
 int  g_rendering_scale = 2;
 int  g_current_frame_num = 0;
+
+GLFWwindow* window;
+GLFWwindow* window1;
+GLFWwindow* window2;
 
 void draw_local_coordinates()
 {
@@ -193,14 +197,34 @@ void draw_3d_objects()
 
 typedef void (*GL_DRAWING_FUNC)(void) ;
 
+void on_windows_close_callback(GLFWwindow* window)
+{
+    printf("disable slave window closing.\n");
+    glfwSetWindowShouldClose(window, GL_FALSE);
+}
+
+void align_slave_windows()
+{
+    int xpos, ypos, width, height;
+    /* Get main windows postion and size */
+    glfwGetWindowPos(window, &xpos, &ypos);
+    glfwGetWindowSize(window, &width, &height);
+    /* Set slave windows position only */
+    glfwSetWindowPos(window1, xpos, ypos + VISUAL_OBJECT_WINDOW_TITLE_BAR_HEIGHT + height);
+    glfwSetWindowSize(window1, width - VISUAL_OBJECT_WINDOW_PROGRESS_WINDOW_WIDTH_OFFSET, VISUAL_OBJECT_WINDOW_PROGRESS_WINDOW_HEIGHT);
+    glfwSetWindowPos(window2, xpos + width, ypos);
+}
+
+void on_windows_move_callback(GLFWwindow *window, int cx, int cy)
+{
+    printf("window move callback.\n");
+    align_slave_windows();
+}
+
 int main(void)
 {
     GLFWwindow         *windows[3];
     GL_DRAWING_FUNC    drawing_funcs[3];
-    
-    GLFWwindow* window;
-    GLFWwindow* window1;
-    GLFWwindow* window2;
     
     /* Initialize the library */
     if (!glfwInit())
@@ -244,14 +268,15 @@ int main(void)
     }
     
     /* layout all windows at the right position with proper size */
-    int xpos, ypos;
-    /* Get main windows postion and size */
-    glfwGetWindowPos(window, &xpos, &ypos);
-    glfwGetWindowSize(window, &width, &height);
-    /* Set slave windows position only */
-    glfwSetWindowPos(window1, xpos, ypos + VISUAL_OBJECT_WINDOW_TITLE_BAR_HEIGHT + height);
-    glfwSetWindowSize(window1, width - VISUAL_OBJECT_WINDOW_PROGRESS_WINDOW_WIDTH_OFFSET, VISUAL_OBJECT_WINDOW_PROGRESS_WINDOW_HEIGHT);
-    glfwSetWindowPos(window2, xpos + width, ypos);
+    align_slave_windows();
+    
+    /* setup callback functions */
+    glfwSetWindowPosCallback(window, &on_windows_move_callback);
+    glfwSetWindowPosCallback(window1, &on_windows_move_callback);
+    glfwSetWindowPosCallback(window2, &on_windows_move_callback);
+
+    glfwSetWindowCloseCallback(window2, &on_windows_close_callback);
+    glfwSetWindowCloseCallback(window1, &on_windows_close_callback);
     
     /* setup viewport for 1st window */
     {
